@@ -1,7 +1,6 @@
-from datetime import datetime
-from datetime import timedelta 
-import time
+from datetime import datetime, timedelta
 
+# Lettura marcature dal file marcature.txt
 try:
     marcatureFile = open("marcature.txt", "r")
     marcature = marcatureFile.readlines()
@@ -10,26 +9,21 @@ try:
     uscitaPP = marcature[1].strip()
     entrataPP = marcature[2].strip()
 except IOError:
-    print 'cannot open', "marcature.txt"    
+    print ('cannot open marcature.txt')    
 finally:
-    marcatureFile.close
+    marcatureFile.close()
 
 ottoOre = int(8 * 60)
 
-entrata_dt = datetime.strptime(entrata,'%H:%M');
-uscitaPP_dt = datetime.strptime(uscitaPP,'%H:%M');
-entrataPP_dt = datetime.strptime(entrataPP,'%H:%M');
+# Conversione degli orari in datetime:
+entrata_dt = datetime.strptime(entrata,'%H:%M')
+uscitaPP_dt = datetime.strptime(uscitaPP,'%H:%M')
+entrataPP_dt = datetime.strptime(entrataPP,'%H:%M')
 
-uscitaPP_ts = time.mktime(uscitaPP_dt.timetuple())
-entrataPP_ts = time.mktime(entrataPP_dt.timetuple())
+durataPP = max(30, round(int((entrataPP_dt - uscitaPP_dt).total_seconds()/60)))
 
-durataPP = int(entrataPP_ts - uscitaPP_ts)/60
-if (durataPP < 30):
-    durataPP = 30
-print('Durata pausa pranzo: ' + str(durataPP) + ' minuti')
+print('Durata pausa pranzo: %d minuti' % durataPP)
 
-durata_lavoro = ottoOre + durataPP
+added_datetime = entrata_dt + timedelta(minutes=ottoOre + durataPP)
 
-added_datetime = entrata_dt + timedelta(minutes=durata_lavoro)
-
-print('Orario di uscita   : ' + datetime.strftime(added_datetime,'%H:%M'))
+print('Orario di uscita   : ' + datetime.strftime(added_datetime, '%H:%M'))
