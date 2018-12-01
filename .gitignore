@@ -1,0 +1,3 @@
+cartellino/.vscode/settings.json
+.pytest_cache/
+tests/__pycache__/
