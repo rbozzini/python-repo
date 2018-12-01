@@ -2,7 +2,7 @@ from datetime import datetime, timedelta
 
 # Lettura marcature dal file marcature.txt
 try:
-    marcatureFile = open("marcature.txt", "r")
+    marcatureFile = open("/home/rbozzini/workspaces/python/cartellino/marcature.txt", "r")
     marcature = marcatureFile.readlines()
     entrata = marcature[0].strip()
     print('Orario di ingresso : ' + entrata)
