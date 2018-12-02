@@ -1,0 +1,12 @@
+{
+    "python.linting.enabled": true,
+    "python.unitTest.pyTestArgs": [
+        "tests"
+    ],
+    "python.unitTest.unittestEnabled": false,
+    "python.unitTest.nosetestsEnabled": false,
+    "python.unitTest.pyTestEnabled": true,
+    "python.pythonPath": "/home/rbozzini/.local/share/virtualenvs/python-K_WzyZt0/bin/python",
+    "python.linting.pylintEnabled": false,
+    "python.linting.pep8Enabled": true
+}
