@@ -9,16 +9,16 @@ try:
     uscitaPP = marcature[1].strip()
     entrataPP = marcature[2].strip()
 except IOError:
-    print ('cannot open marcature.txt')    
+    print('cannot open marcature.txt')    
 finally:
     marcatureFile.close()
 
 ottoOre = int(8 * 60)
 
 # Conversione degli orari in datetime:
-entrata_dt = datetime.strptime(entrata,'%H:%M')
-uscitaPP_dt = datetime.strptime(uscitaPP,'%H:%M')
-entrataPP_dt = datetime.strptime(entrataPP,'%H:%M')
+entrata_dt = datetime.strptime(entrata, '%H:%M')
+uscitaPP_dt = datetime.strptime(uscitaPP, '%H:%M')
+entrataPP_dt = datetime.strptime(entrataPP, '%H:%M')
 
 durataPP = max(30, round(int((entrataPP_dt - uscitaPP_dt).total_seconds()/60)))
 
