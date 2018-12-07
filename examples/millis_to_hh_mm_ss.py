@@ -11,7 +11,7 @@ def print_time_hh_mm_ss(millis):
     print("%02d:%02d:%02d" % (hours, minutes, seconds))
 
 try:
-    millis_per_doc = 20
+    millis_per_doc = 14
 
     abs_file_path = os.path.join(os.path.dirname(__file__), "docs_to_index.txt")
     millisFile = open(abs_file_path, "r")
