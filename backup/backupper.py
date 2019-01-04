@@ -1,5 +1,6 @@
 import os
 from shutil import copyfile
+from backup_report import BackupReport
 
 
 # Copia sempre senza alcun controllo
@@ -46,9 +47,10 @@ class Backupper(object):
 
 
 class CopyFile(Backupper):
-    def __init__(self, source_root, dest_root, rules):
+    def __init__(self, source_root, dest_root, rules, report):
         super().__init__(source_root, dest_root)
         self.rules = rules
+        self.report = report
         self.existing_files = set()
 
     def backup_file(self, file_path, dry_run):
@@ -57,25 +59,28 @@ class CopyFile(Backupper):
         rule = self.rules.get(ext[1:].lower())
 
         if not rule:
-            print("Skipping {} (no rule)".format(file_path))
+            self.report.add_no_ruled_file(file_path)
             return
 
         # Ricavo percorso file destinazione
         dest_file_path = self._build_dest_path(file_path)
         exists = os.path.isfile(dest_file_path)
 
-        if not exists or rule == RULE_ALWAYS:
+        if not exists:
+            self.report.add_added_file(dest_file_path)
+            pass
+
+        elif rule == RULE_ALWAYS:
+            self.report.add_updated_file(dest_file_path)
             pass
 
         elif rule == RULE_NEWER:
-            print("check if newer:")
             newer = os.path.getmtime(file_path) > os.path.getmtime(dest_file_path)
-            if not newer:
-                print("Skipping {} (not newer)".format(file_path))
-                return
+            if newer:
+                self.report.add_updated_file(dest_file_path)
+                pass
 
         elif rule == RULE_ONCE:
-            print("Skipping {} (exists)".format(file_path))
             self.existing_files.add(dest_file_path)
             return
 
@@ -99,11 +104,19 @@ class CopyFile(Backupper):
         copyfile(file_path, dest_file_path)
 
     def check_exists(self, file_path, dry_run):
+        # Leggo la regola per il file:
+        ext = os.path.splitext(file_path)[1]
+        rule = self.rules.get(ext[1:].lower())
+
+        if not rule:
+            return
+
         if file_path not in self.existing_files:
             if dry_run:
                 print("To delete {}".format(file_path))
             else:
                 os.remove(file_path)
+            self.report.add_deleted_file(file_path)
 
 if __name__ == "__main__":
 
@@ -112,7 +125,9 @@ if __name__ == "__main__":
              'jpg': RULE_NEWER, 
              'png': RULE_NEWER,
              'lrcat ': RULE_NEWER}
-
+    
+    report = BackupReport()
     bkp = CopyFile("/Users/rossellabozzini/Dev/python-repo/resources/Backup/Source",
-                   "/Users/rossellabozzini/Dev/python-repo/resources/Backup/Dest", rules)
+                   "/Users/rossellabozzini/Dev/python-repo/resources/Backup/Dest", rules, report)
     bkp.backup(True)
+    print(report.to_json())
