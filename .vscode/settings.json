@@ -6,7 +6,7 @@
     "python.unitTest.unittestEnabled": false,
     "python.unitTest.nosetestsEnabled": false,
     "python.unitTest.pyTestEnabled": true,
-    "python.pythonPath": "/home/rbozzini/.local/share/virtualenvs/python-K_WzyZt0/bin/python",
+    "python.pythonPath": "/opt/local/bin/python",
     "python.linting.pep8Enabled": true,
     "python.linting.pep8Args": ["--max-line-length=120" ]
 }
