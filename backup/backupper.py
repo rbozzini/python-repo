@@ -1,4 +1,5 @@
 import os
+import time
 from shutil import copyfile
 from backup_report import BackupReport
 
@@ -127,7 +128,10 @@ if __name__ == "__main__":
              'lrcat ': RULE_NEWER}
     
     report = BackupReport()
+    report.start()
     bkp = CopyFile("/Users/rossellabozzini/Dev/python-repo/resources/Backup/Source",
                    "/Users/rossellabozzini/Dev/python-repo/resources/Backup/Dest", rules, report)
     bkp.backup(True)
+    time.sleep(5)
+    report.end()
     print(report.to_json())
